@@ -4,14 +4,17 @@
 #include <string.h>     //strlen
 #include <sys/socket.h> // socket
 #include <arpa/inet.h>  //inet_addr
+#include <stdlib.h>
 
 int main(void)
 {
+    int data_size = 0;
     int listenfd = 0;
     int c;
     int bytesReceived = 0;
     int connfd = 0;
     struct sockaddr_in serv_addr, client;
+    char dataSizeBuffer[4];
     char recvBuff[512];
 
     listenfd = socket(AF_INET, SOCK_STREAM, 0);
@@ -43,7 +46,7 @@ int main(void)
     }
 
     /* Create file where data will be stored */
-
+    /*
     FILE *fp;
     fp = fopen("server.dat", "wb");
     if (NULL == fp)
@@ -51,7 +54,7 @@ int main(void)
         printf("Error opening file");
         return 1;
     }
-
+    */
     // Accept and incoming connection
     puts("Waiting for incoming connections...");
     c = sizeof(struct sockaddr_in);
@@ -59,16 +62,34 @@ int main(void)
     while (1)
     {
         connfd = accept(listenfd, (struct sockaddr *)&client, (socklen_t *)&c);
-
         if (connfd < 0)
         {
             perror("accept failed");
             return 1;
         }
         puts("Connection accepted");
-
+        /*
         FILE *fp;
         fp = fopen("server.dat", "wb");
+        if (NULL == fp)
+        {
+            printf("Error opening file");
+            return 1;
+        }
+        */
+
+        data_size = recv(connfd, dataSizeBuffer, sizeof(dataSizeBuffer), 0);
+        printf("Data size: %s \n", dataSizeBuffer);
+        long value;
+        char *ptr;
+        value = strtol(dataSizeBuffer, &ptr, 10);
+        printf("Value: %ld \n", value);
+        char dataNameBuffer[value];
+        data_size = recv(connfd, dataNameBuffer, value, 0);
+        printf("Data size: %s \n", dataNameBuffer);
+
+        FILE *fp;
+        fp = fopen(dataNameBuffer, "wb");
         if (NULL == fp)
         {
             printf("Error opening file");

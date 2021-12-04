@@ -4,6 +4,7 @@
 #include <string.h>     //strlen
 #include <sys/socket.h> //socket
 #include <arpa/inet.h>  //inet_addr
+#include <stdlib.h>
 
 int main(int argc, char *argv[])
 {
@@ -42,8 +43,17 @@ int main(int argc, char *argv[])
         printf("File opern error");
         return 1;
     }
-    printf("Data size: %ld \n", strlen(argv[1]));
+    int DataSize = 0;
+    DataSize = strlen(argv[1]);
+    printf("Data size: %d \n", DataSize);
     printf("Data name: %s \n", argv[1]);
+
+    char DataSizeString[4];
+    sprintf(DataSizeString, "%d", DataSize);
+    send(sockfd, DataSizeString, sizeof(DataSizeString), 0);
+
+    send(sockfd, argv[1], strlen(argv[1]), 0);
+
     /* Read data from file and send it*/
     while (!feof(fp))
     {
