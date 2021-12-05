@@ -1,5 +1,5 @@
 
-// kompajlirajte sa: $gcc fileclient.c -o fileclient i startajte sa $./fileclient   ime-datoteke
+// Compile with: $gcc fileclient.c -o fileclient and run with $./fileclient  data-name
 #include <stdio.h>      //printf
 #include <string.h>     //strlen
 #include <sys/socket.h> //socket
@@ -43,16 +43,17 @@ int main(int argc, char *argv[])
         printf("File opern error");
         return 1;
     }
-    int DataSize = 0;
-    DataSize = strlen(argv[1]);
-    printf("Data size: %d \n", DataSize);
-    printf("Data name: %s \n", argv[1]);
 
-    char DataSizeString[4];
-    sprintf(DataSizeString, "%d", DataSize);
-    send(sockfd, DataSizeString, sizeof(DataSizeString), 0);
+    int DataSize = 0;                            // Length of data-name
+    DataSize = strlen(argv[1]);                  //
+    printf("Data name length: %d \n", DataSize); // print Data length
+    printf("Data name: %s \n", argv[1]);         // print Data name
 
-    send(sockfd, argv[1], strlen(argv[1]), 0);
+    char DataSizeString[4];                                  // First, we have to send length
+    sprintf(DataSizeString, "%d", DataSize);                 // cast int to string
+    send(sockfd, DataSizeString, sizeof(DataSizeString), 0); // sending length
+
+    send(sockfd, argv[1], strlen(argv[1]), 0); // sending data name
 
     /* Read data from file and send it*/
     while (!feof(fp))

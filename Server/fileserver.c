@@ -1,5 +1,5 @@
 
-// kompajlirajte sa: $gcc fileserver.c -o fileserver  i startajte sa $./fileserver
+// Compile with: $gcc fileserver.c -o fileserver  Run command: $./fileserver
 #include <stdio.h>
 #include <string.h>     //strlen
 #include <sys/socket.h> // socket
@@ -79,14 +79,14 @@ int main(void)
         */
 
         data_size = recv(connfd, dataSizeBuffer, sizeof(dataSizeBuffer), 0);
-        printf("Data size: %s \n", dataSizeBuffer);
+        printf("Data name length: %s \n", dataSizeBuffer);
         long value;
         char *ptr;
         value = strtol(dataSizeBuffer, &ptr, 10);
-        printf("Value: %ld \n", value);
+        // printf("Value: %ld \n", value);
         char dataNameBuffer[value];
         data_size = recv(connfd, dataNameBuffer, value, 0);
-        printf("Data size: %s \n", dataNameBuffer);
+        printf("Data name: %s \n", dataNameBuffer);
 
         FILE *fp;
         fp = fopen(dataNameBuffer, "wb");
