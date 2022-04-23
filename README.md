@@ -1,6 +1,6 @@
 # C Socket Programming: Simple Server and Client
 
-Distribuirani sistemi automatizacije / Fakultet elektrotehnike
+Distributed automation systems / Faculty of Electrical Engineering (University in Tuzla)
 
 ## Client and Server
 
